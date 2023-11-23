@@ -11,7 +11,7 @@
           <ul>
             <li>By {{blog.User.firstName}} {{blog.User.lastName}}</li>
             <li>{{showDate blog.createdAt}}</li>
-            <li>{{blog.Comments.length}} Comments</li>
+            <li>{{#if blog.Comments.length}}{{blog.Comments.length}}{{else}}0{{/if}} Comments</li>
           </ul>
         </div>
       </div>
@@ -27,22 +27,16 @@
       {{>sidebar}}
       <div class="col-lg-8 col-md-7 order-md-1 order-1">
         <div class="blog__details__text">
-          <img src="/img/blog/details/details-pic.jpg" alt="" />
+          <img class="w-100" src="{{blog.imagePath}}" alt="" />
           <p>{{blog.title}}</p>
-          <h3>The corner window forms a place within a place that is a resting
-            point within the large space.</h3>
-          <p>The study area is located at the back with a view of the vast
-            nature. Together with the other buildings, a congruent story has
-            been managed in which the whole has a reinforcing effect on the
-            components. The use of materials seeks connection to the main house,
-            the adjacent stables</p>
+          {{{blog.description}}}
         </div>
         <div class="blog__details__content">
           <div class="row">
             <div class="col-lg-6">
               <div class="blog__details__author">
                 <div class="blog__details__author__pic">
-                  <img src="/img/blog/details/details-author.jpg" alt="" />
+                  <img src="{{blog.User.imagePath}}" alt="" />
                 </div>
                 <div class="blog__details__author__text">
                   <h6>{{blog.User.firstName}} {{blog.User.lastName}}</h6>
@@ -56,8 +50,8 @@
               <div class="blog__details__widget">
                 <ul>
                   <li><span>Categories:</span> {{blog.Category.name}}</li>
-                  <li><span>Tags:</span>
-                    {{#each blog.Tags}} {{name}}, {{/each}}</li>
+                  <li><span>Tags: </span>
+                    {{#each blog.Tags}} {{ name }}{{#unless @last}}, {{/unless}}{{/each}}</li>
                 </ul>
                 <div class="blog__details__social">
                   <a href="#"><i class="fa fa-facebook"></i></a>
