@@ -39,4 +39,4 @@ app.use("/blogs", require("./routes/blogRouter"));
 //   });
 // });
 
-app.listen(port, () => console.log(`Example app listinging on port ${port}`));
+app.listen(port, () => console.log(`Example app listening on port ${port}`));

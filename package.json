@@ -1,11 +1,11 @@
 {
-  "name": "21127081",
+  "name": "21127243",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon index.js"
+    "start": "nodemon -e js,hbs,html,json index.js"
   },
   "keywords": [],
   "author": "",
