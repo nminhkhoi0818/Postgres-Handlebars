@@ -45,9 +45,9 @@
           {{/each}}
           <div class="col-lg-12">
             <div class="product__pagination blog__pagination">
-              <a href="/blogs?page=1">1</a>
-              <a href="/blogs?page=2">2</a>
-              <a href="/blogs?page=3">3</a>
+              {{#for 1 totalPage 1}}
+                <a class="pagination-link" href="{{this}}">{{this}}</a>
+              {{/for}}
             </div>
           </div>
         </div>
@@ -55,4 +55,11 @@
     </div>
   </div>
 </section>
+<script>
+  document.querySelectorAll('.pagination-link').forEach((elm) => {
+    let params = (new URL(document.location)).searchParams
+    params.set("page", elm.getAttribute("href"))
+    elm.setAttribute("href", window.location.origin + window.location.pathname + "?" + params.toString())
+  })
+</script>
 <!-- Blog Section End -->
