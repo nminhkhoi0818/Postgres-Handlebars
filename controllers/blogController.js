@@ -9,40 +9,36 @@ controller.showList = async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const searchQuery = req.query.search;
     const pageSize = 3;
-
+    
+    const includeClause = [{ model: models.Comment }];
+    const whereClause = {}
     if (!isNaN(categoryId)) {
-      res.locals.blogs = await models.Blog.findAll({
-        attributes: ['id', 'title', 'imagePath', 'summary', 'createdAt'],
-        include: [
-          { model: models.Comment },
-          { model: models.Category, where: { id: categoryId } }
-        ]
-      });
-    } else if (!isNaN(tagId)) {
-      res.locals.blogs = await models.Blog.findAll({
-        attributes: ['id', 'title', 'imagePath', 'summary', 'createdAt'],
-        include: [
-          { model: models.Comment },
-          { model: models.Tag, where: { id: tagId } }
-        ]
-      });
-    } else if (searchQuery) {
-      res.locals.blogs = await models.Blog.findAll({
-        attributes: ['id', 'title', 'imagePath', 'summary', 'createdAt'],
-        include: [{ model: models.Comment }],
-        where: { title: { [sequelize.Op.iLike]: searchQuery } }
-      });
-    } else {
-      res.locals.blogs = await models.Blog.findAll({
-        attributes: ['id', 'title', 'imagePath', 'summary', 'createdAt'],
-        include: [{ model: models.Comment }],
-        limit: pageSize,
-        offset: (page - 1) * pageSize
-      });
+      includeClause.push({ model: models.Category, where: { id: categoryId } });
     }
-    res.render('index');
+    if (!isNaN(tagId)) {
+      includeClause.push({ model: models.Tag, where: { id: tagId } });
+    }
+    if (searchQuery) {
+      whereClause.title =  { [sequelize.Op.iLike]: `%${searchQuery}%` }
+    }
+    res.locals.blogs = await models.Blog.findAll({
+      attributes: ['id', 'title', 'imagePath', 'summary', 'createdAt'],
+      where: whereClause,
+      include: includeClause,
+      limit: pageSize,
+      offset: (page - 1) * pageSize
+    });
+
+    const totalBlogs = await models.Blog.count({
+      where: whereClause,
+      include: includeClause,
+      distinct: true
+    });
+    res.locals.totalPage = Math.ceil(totalBlogs / pageSize);
+    
+    return res.render('index');
   } catch (e) {
-    return res.sendStatus(500).send(e.message);
+    return res.status(500).send(e.message);
   }
 };
 

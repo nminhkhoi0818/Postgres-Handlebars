@@ -13,7 +13,7 @@ const queryTags = async (req, res, next) => {
     return next();
   }
   catch (e) {
-    return res.sendStatus(500).send(e.message);
+    return res.status(500).send(e.message);
   }
 };
 
